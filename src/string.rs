@@ -9,7 +9,7 @@
 
 //! Immutable strings.
 
-#![allow(non_uppercase_statics)]
+#![allow(non_upper_case_globals)]
 
 use base::{Boolean, CFAllocatorRef, CFIndex, CFIndexConvertible, CFOptionFlags, CFRange};
 use base::{CFRelease, CFRetain, CFTypeID, CFTypeRef, TCFType};
@@ -198,6 +198,7 @@ type CFStringEncodings = CFIndex;
 //static kCFStringEncodingUTF7_IMAP: CFStringEncoding = 0x0A10;
 //static kCFStringEncodingShiftJIS_X0213_00: CFStringEncoding = 0x0628; /* Deprecated */
 
+#[repr(C)]
 struct __CFString;
 
 pub type CFStringRef = *const __CFString;
@@ -466,4 +467,3 @@ fn string_and_back() {
     let converted = cfstr.to_string();
     assert!(original == converted.as_slice());
 }
-

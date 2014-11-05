@@ -22,6 +22,7 @@ pub type CFSetEqualCallBack = *const u8;
 pub type CFSetHashCallBack = *const u8;
 
 #[allow(dead_code)]
+#[repr(C)]
 pub struct CFSetCallBacks {
     version: CFIndex,
     retain: CFSetRetainCallBack,
@@ -31,6 +32,7 @@ pub struct CFSetCallBacks {
     hash: CFSetHashCallBack,
 }
 
+#[repr(C)]
 struct __CFSet;
 
 pub type CFSetRef = *const __CFSet;
@@ -38,6 +40,7 @@ pub type CFSetRef = *const __CFSet;
 /// An immutable bag of elements.
 ///
 /// FIXME(pcwalton): Should be a newtype struct, but that fails due to a Rust compiler bug.
+#[repr(C)]
 pub struct CFSet {
     obj: CFSetRef,
 }
@@ -106,7 +109,7 @@ extern {
     static kCFTypeSetCallBacks: CFSetCallBacks;
 
     /* Creating Sets */
-    fn CFSetCreate(allocator: CFAllocatorRef, values: *const *const c_void, numValues: CFIndex, 
+    fn CFSetCreate(allocator: CFAllocatorRef, values: *const *const c_void, numValues: CFIndex,
                    callBacks: *const CFSetCallBacks) -> CFSetRef;
 
     /* Applying a Function to Set Members */
@@ -114,4 +117,3 @@ extern {
 
     fn CFSetGetTypeID() -> CFTypeID;
 }
-

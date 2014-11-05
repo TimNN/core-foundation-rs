@@ -34,6 +34,7 @@ impl CFIndexConvertible for uint {
 pub type CFOptionFlags = u32;
 
 #[allow(dead_code)]
+#[repr(C)]
 pub struct CFRange {
     location: CFIndex,
     length: CFIndex
@@ -48,10 +49,12 @@ impl CFRange {
     }
 }
 
+#[repr(C)]
 struct __CFAllocator;
 
 pub type CFAllocatorRef = *const __CFAllocator;
 
+#[repr(C)]
 struct __CFNull;
 
 pub type CFNullRef = *const __CFNull;
@@ -60,11 +63,13 @@ pub type CFHashCode = c_ulong;
 
 pub type CFTypeID = c_ulong;
 
+#[repr(C)]
 struct __CFType;
 
 pub type CFTypeRef = *const __CFType;
 
 /// Superclass of all Core Foundation objects.
+#[repr(C)]
 pub struct CFType {
     obj: CFTypeRef,
 }
@@ -223,4 +228,3 @@ extern {
     /* Base Utilities Reference */
     // N.B. Some things missing here.
 }
-

@@ -14,6 +14,7 @@ use base::{CFTypeID, CFTypeRef, TCFType, kCFAllocatorDefault};
 
 use std::mem;
 
+#[repr(C)]
 struct __CFData;
 
 pub type CFDataRef = *const __CFData;
@@ -21,6 +22,7 @@ pub type CFDataRef = *const __CFData;
 /// A byte buffer.
 ///
 /// FIXME(pcwalton): Should be a newtype struct, but that fails due to a Rust compiler bug.
+#[repr(C)]
 pub struct CFData {
     obj: CFDataRef,
 }
@@ -69,7 +71,7 @@ impl TCFType<CFDataRef> for CFData {
 impl CFData {
     pub fn from_buffer(buffer: &[u8]) -> CFData {
         unsafe {
-            let data_ref = CFDataCreate(kCFAllocatorDefault, 
+            let data_ref = CFDataCreate(kCFAllocatorDefault,
                                         buffer.as_ptr(),
                                         buffer.len().to_CFIndex());
             TCFType::wrap_under_create_rule(data_ref)
@@ -100,7 +102,7 @@ extern {
      * CFData.h
      */
 
-    fn CFDataCreate(allocator: CFAllocatorRef, 
+    fn CFDataCreate(allocator: CFAllocatorRef,
                     bytes: *const u8, length: CFIndex) -> CFDataRef;
     //fn CFDataFind
     fn CFDataGetBytePtr(theData: CFDataRef) -> *const u8;

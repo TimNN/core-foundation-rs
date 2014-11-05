@@ -14,6 +14,7 @@ use std::mem;
 
 pub type Boolean = u32;
 
+#[repr(C)]
 struct __CFBoolean;
 
 pub type CFBooleanRef = *const __CFBoolean;
@@ -21,6 +22,7 @@ pub type CFBooleanRef = *const __CFBoolean;
 /// A Boolean type.
 ///
 /// FIXME(pcwalton): Should be a newtype struct, but that fails due to a Rust compiler bug.
+#[repr(C)]
 pub struct CFBoolean {
     obj: CFBooleanRef,
 }
@@ -87,4 +89,3 @@ extern {
 
     fn CFBooleanGetTypeID() -> CFTypeID;
 }
-
