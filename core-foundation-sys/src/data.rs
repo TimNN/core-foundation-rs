@@ -9,12 +9,13 @@
 
 use std::os::raw::c_void;
 
-use base::{CFAllocatorRef, CFTypeID, CFIndex};
+use base::{CFAllocatorRef, CFTypeID, CFIndex, CFRange};
 
 #[repr(C)]
 pub struct __CFData(c_void);
 
 pub type CFDataRef = *const __CFData;
+pub type CFMutableDataRef = *mut __CFData;
 
 extern {
     /*
@@ -28,4 +29,13 @@ extern {
     pub fn CFDataGetLength(theData: CFDataRef) -> CFIndex;
 
     pub fn CFDataGetTypeID() -> CFTypeID;
+
+    pub fn CFDataCreateMutable(allocator: CFAllocatorRef, capacity: CFIndex) -> CFMutableDataRef;
+
+    pub fn CFDataGetMutableBytePtr(theData: CFMutableDataRef) -> *mut u8;
+
+    pub fn CFDataSetLength(theData: CFMutableDataRef, length: CFIndex);
+
+    // "CFData{Append,Delete}Bytes" delegate to this function anyway, so we might as well do the delegation ourselves.
+    pub fn CFDataReplaceBytes(theData: CFMutableDataRef, range: CFRange, newBytes: *const u8, newLength: CFIndex);
 }
