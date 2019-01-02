@@ -25,6 +25,7 @@ macro_rules! declare_TCFType {
         $ty:ident, $raw:ident
     ) => {
         $(#[$doc])*
+        #[repr(transparent)]
         pub struct $ty($raw);
 
         impl Drop for $ty {
