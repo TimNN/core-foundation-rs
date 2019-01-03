@@ -12,6 +12,7 @@
 pub use core_foundation_sys::data::*;
 use core_foundation_sys::base::{CFIndex, CFRange};
 use core_foundation_sys::base::{kCFAllocatorDefault};
+use std::io;
 use std::mem;
 use std::ops::{Deref, DerefMut};
 use std::slice;
@@ -159,5 +160,16 @@ impl DerefMut for CFMutableData {
     #[inline]
     fn deref_mut(&mut self) -> &mut [u8] {
         self.bytes_mut()
+    }
+}
+
+impl io::Write for CFMutableData {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        self.extend_from_slice(buf);
+        Ok(buf.len())
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        Ok(())
     }
 }
