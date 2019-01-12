@@ -17,6 +17,7 @@ use core_foundation_sys::base::{Boolean, CFIndex, CFRange};
 use core_foundation_sys::base::{kCFAllocatorDefault, kCFAllocatorNull};
 use std::borrow::Cow;
 use std::fmt;
+use std::marker::PhantomData;
 use std::str::{self, FromStr};
 use std::ptr;
 use std::ffi::CStr;
@@ -27,6 +28,9 @@ declare_TCFType!{
     CFString, CFStringRef
 }
 impl_TCFType!(CFString, CFStringRef, CFStringGetTypeID);
+
+#[repr(transparent)]
+pub struct CFBorrowedString<'a>(CFStringRef, PhantomData<&'a CFString>);
 
 impl FromStr for CFString {
     type Err = ();
@@ -138,6 +142,11 @@ impl CFString {
         unsafe {
             CFStringGetLength(self.0)
         }
+    }
+
+    #[inline]
+    pub fn borrow(&self) -> CFBorrowedString {
+        CFBorrowedString(self.0, PhantomData)
     }
 }
 
