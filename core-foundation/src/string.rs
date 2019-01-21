@@ -30,6 +30,7 @@ declare_TCFType!{
 impl_TCFType!(CFString, CFStringRef, CFStringGetTypeID);
 
 #[repr(transparent)]
+#[derive(Copy, Clone)]
 pub struct CFBorrowedString<'a>(CFStringRef, PhantomData<&'a CFString>);
 
 impl FromStr for CFString {
